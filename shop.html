@@ -8,23 +8,101 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  .brand-tabs { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1.5rem; }
-  .brand-tab {
-    padding:.45rem 1.1rem; border-radius:20px; border:1px solid var(--border);
-    background:transparent; color:var(--text-muted); font-family:var(--font-body);
-    font-size:.85rem; font-weight:600; cursor:pointer;
-    transition:all var(--transition);
-  }
-  .brand-tab:hover { border-color:var(--text-muted); color:var(--text); }
-  .brand-tab.active { background:var(--accent); color:#080b12; border-color:var(--accent); }
-  .brand-tab.apple.active { background:var(--accent); }
-  .brand-tab.samsung.active { background:var(--accent2); border-color:var(--accent2); }
-  .product-count-chip {
-    display:inline-flex; align-items:center; gap:.4rem;
-    background:var(--surface2); border:1px solid var(--border);
-    border-radius:20px; padding:.3rem .9rem; font-size:.8rem; color:var(--text-muted);
-  }
-  .price-note { font-size:.75rem; color:var(--text-muted); margin-top:.4rem; font-style:italic; }
+/* ---- CATEGORY MEGA TABS ---- */
+.mega-tabs-wrap {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 70px;
+  z-index: 90;
+  padding: 0 1.5rem;
+}
+.mega-tabs {
+  display: flex;
+  gap: 0;
+  max-width: 1180px;
+  margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mega-tabs::-webkit-scrollbar { display: none; }
+.mega-tab {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1rem 1.4rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .18s, border-color .18s;
+}
+.mega-tab:hover { color: var(--text); }
+.mega-tab.active { color: var(--text); border-bottom-color: var(--tab-accent, var(--accent)); }
+.mega-tab .tab-count {
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .1rem .45rem;
+  border-radius: 10px;
+  min-width: 22px;
+  text-align: center;
+}
+.mega-tab.active .tab-count { background: var(--tab-accent, var(--accent)); color: #080b12; }
+.mega-tab[data-cat="all"] { --tab-accent: #aaa; }
+.mega-tab[data-cat="phones"] { --tab-accent: var(--accent); }
+.mega-tab[data-cat="tablets-adult"] { --tab-accent: var(--accent2); }
+.mega-tab[data-cat="tablets-kids"] { --tab-accent: #f06292; }
+
+/* ---- BRAND PILLS ---- */
+.brand-pills { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.brand-pill {
+  padding: .3rem .9rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .18s;
+}
+.brand-pill:hover { border-color: var(--text-muted); color: var(--text); }
+.brand-pill.active { background: var(--accent); color: #080b12; border-color: var(--accent); }
+
+.count-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+.count-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: .3rem .9rem;
+  font-size: .8rem;
+  color: var(--text-muted);
+}
+.price-note {
+  font-size: .72rem;
+  color: var(--text-muted);
+  margin-top: .75rem;
+  font-style: italic;
+  line-height: 1.5;
+}
 </style>
 </head>
 <body>
@@ -40,34 +118,46 @@
   <button class="hamburger" id="hamburger">&#9776;</button>
 </nav>
 
-<div class="page-header">
-  <div class="container">
-    <h1>All Products</h1>
-    <p>iPhones 7–17 Pro Max & Samsung Galaxy S8–S25 Ultra — real Nigerian market prices</p>
+<!-- MEGA CATEGORY TABS -->
+<div class="mega-tabs-wrap">
+  <div class="mega-tabs" id="mega-tabs">
+    <button class="mega-tab active" data-cat="all">
+      🛒 All Products <span class="tab-count" id="cnt-all">—</span>
+    </button>
+    <button class="mega-tab" data-cat="phones">
+      📱 Smartphones <span class="tab-count" id="cnt-phones">—</span>
+    </button>
+    <button class="mega-tab" data-cat="tablets-adult">
+      📟 Adult Tablets <span class="tab-count" id="cnt-tablets-adult">—</span>
+    </button>
+    <button class="mega-tab" data-cat="tablets-kids">
+      🎮 Kids Tablets <span class="tab-count" id="cnt-tablets-kids">—</span>
+    </button>
   </div>
 </div>
 
-<section class="shop-section">
+<section class="shop-section" style="padding-top: 2rem;">
   <div class="container shop-layout">
 
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <aside class="filters">
-      <h3>Filters</h3>
+      <h3>Filter & Sort</h3>
 
-      <div class="filter-group">
+      <div class="filter-group" id="brand-filter-group">
         <h4>Brand</h4>
-        <label><input type="radio" name="brand" value="all" checked> All Brands</label>
-        <label><input type="radio" name="brand" value="apple"> 🍎 Apple (iPhone)</label>
-        <label><input type="radio" name="brand" value="samsung"> 🌀 Samsung (Galaxy S)</label>
+        <div class="brand-pills" id="brand-pills">
+          <button class="brand-pill active" data-brand="all">All</button>
+        </div>
       </div>
 
       <div class="filter-group">
         <h4>Price Range</h4>
         <label><input type="radio" name="price" value="all" checked> All Prices</label>
-        <label><input type="radio" name="price" value="0-200000"> Under ₦200k</label>
-        <label><input type="radio" name="price" value="200000-500000"> ₦200k – ₦500k</label>
-        <label><input type="radio" name="price" value="500000-1000000"> ₦500k – ₦1M</label>
-        <label><input type="radio" name="price" value="1000000-9999999"> Above ₦1M</label>
+        <label><input type="radio" name="price" value="0-100000"> Under ₦100k</label>
+        <label><input type="radio" name="price" value="100000-300000"> ₦100k – ₦300k</label>
+        <label><input type="radio" name="price" value="300000-700000"> ₦300k – ₦700k</label>
+        <label><input type="radio" name="price" value="700000-1500000"> ₦700k – ₦1.5M</label>
+        <label><input type="radio" name="price" value="1500000-9999999"> Above ₦1.5M</label>
       </div>
 
       <div class="filter-group">
@@ -80,29 +170,24 @@
         </select>
       </div>
 
-      <button class="btn-primary" id="apply-filters" style="width:100%; margin-top:1rem;">Apply Filters</button>
-      <button id="reset-filters" style="width:100%; margin-top:.5rem; background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:.7rem; border-radius:8px; cursor:pointer; font-family:var(--font-body); font-size:.85rem;">Reset</button>
+      <button class="btn-primary" id="apply-btn" style="width:100%; margin-top:1rem;">Apply</button>
+      <button id="reset-btn" style="width:100%; margin-top:.5rem; background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:.7rem; border-radius:8px; cursor:pointer; font-family:var(--font-body); font-size:.85rem; transition:all .18s;">Reset All</button>
 
-      <p class="price-note">* Prices reflect current Nigerian market rates (brand-new units, May 2026). Prices may vary by seller.</p>
+      <p class="price-note">* Prices reflect current Nigerian market rates (brand-new units, May 2026). Figures may vary by seller and exchange rate.</p>
     </aside>
 
-    <!-- Products -->
+    <!-- MAIN -->
     <div class="shop-main">
-      <div class="shop-toolbar" style="flex-wrap:wrap; gap:.75rem;">
-        <div class="brand-tabs" id="brand-tabs">
-          <button class="brand-tab active" data-brand="all">All</button>
-          <button class="brand-tab apple" data-brand="apple">🍎 iPhones (7–17 Pro Max)</button>
-          <button class="brand-tab samsung" data-brand="samsung">🌀 Samsung S8–S25 Ultra</button>
-        </div>
-        <input type="text" id="search-input" placeholder="Search by model..." class="search-box">
+      <div class="shop-toolbar" style="margin-bottom:.75rem;">
+        <div></div>
+        <input type="text" id="search-input" placeholder="Search products..." class="search-box">
       </div>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:.5rem;">
-        <span class="product-count-chip" id="product-count">Loading...</span>
+      <div class="count-bar">
+        <span class="count-chip" id="product-count">Loading...</span>
       </div>
       <div class="products-grid" id="shop-products"></div>
     </div>
   </div>
-   For more information chat us on whatsapp (08063816255)
 </section>
 
 <footer class="footer">
@@ -116,72 +201,108 @@
 <script src="data.js"></script>
 <script src="main.js"></script>
 <script>
+  let activeCat = 'all';
   let activeBrand = 'all';
 
+  const brandsByCategory = {
+    all:           ['all','apple','samsung','lenovo','amazon','atouch','modio','bebe','genius'],
+    phones:        ['all','apple','samsung'],
+    'tablets-adult': ['all','apple','samsung','lenovo'],
+    'tablets-kids':  ['all','atouch','modio','bebe','genius','amazon','lenovo','samsung','apple']
+  };
+
+  const brandLabels = {
+    all:'All', apple:'🍎 Apple', samsung:'🌀 Samsung',
+    lenovo:'Lenovo', amazon:'📦 Amazon', atouch:'Atouch',
+    modio:'Modio', bebe:'Bebe', genius:'Genius Kids'
+  };
+
+  function updateTabCounts() {
+    const all = getAllProducts();
+    document.getElementById('cnt-all').textContent = all.length;
+    document.getElementById('cnt-phones').textContent = all.filter(p=>p.category==='phones').length;
+    document.getElementById('cnt-tablets-adult').textContent = all.filter(p=>p.category==='tablets-adult').length;
+    document.getElementById('cnt-tablets-kids').textContent = all.filter(p=>p.category==='tablets-kids').length;
+  }
+
+  function updateBrandPills() {
+    const container = document.getElementById('brand-pills');
+    const brands = brandsByCategory[activeCat] || ['all'];
+    container.innerHTML = brands.map(b =>
+      `<button class="brand-pill${activeBrand===b?' active':''}" data-brand="${b}">${brandLabels[b]||b}</button>`
+    ).join('');
+    container.querySelectorAll('.brand-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeBrand = btn.dataset.brand;
+        container.querySelectorAll('.brand-pill').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      });
+    });
+  }
+
   function applyFilters() {
-    const brand = document.querySelector('input[name="brand"]:checked').value;
     const price = document.querySelector('input[name="price"]:checked').value;
-    const sort = document.getElementById('sort-select').value;
+    const sort  = document.getElementById('sort-select').value;
     const search = document.getElementById('search-input').value.toLowerCase();
 
     let products = getAllProducts();
-
+    if (activeCat !== 'all') products = products.filter(p => p.category === activeCat);
     if (activeBrand !== 'all') products = products.filter(p => p.brand === activeBrand);
-    if (brand !== 'all') products = products.filter(p => p.brand === brand);
     if (price !== 'all') {
       const [min, max] = price.split('-').map(Number);
       products = products.filter(p => p.price >= min && p.price <= max);
     }
-    if (search) products = products.filter(p => p.name.toLowerCase().includes(search));
+    if (search) products = products.filter(p => p.name.toLowerCase().includes(search) || (p.brand||'').toLowerCase().includes(search));
 
-    if (sort === 'price-asc') products.sort((a,b) => a.price - b.price);
+    if (sort === 'price-asc')  products.sort((a,b) => a.price - b.price);
     else if (sort === 'price-desc') products.sort((a,b) => b.price - a.price);
-    else if (sort === 'name') products.sort((a,b) => a.name.localeCompare(b.name));
+    else if (sort === 'name')  products.sort((a,b) => a.name.localeCompare(b.name));
     else products.sort((a,b) => b.id - a.id);
 
     renderProductGrid('shop-products', products);
-    document.getElementById('product-count').textContent = products.length + ' product' + (products.length !== 1 ? 's' : '') + ' found';
+    document.getElementById('product-count').textContent =
+      products.length + ' product' + (products.length !== 1 ? 's' : '') + ' found';
   }
 
-  // Brand tab clicks
-  document.getElementById('brand-tabs').addEventListener('click', e => {
-    const btn = e.target.closest('[data-brand]');
+  // Mega tab click
+  document.getElementById('mega-tabs').addEventListener('click', e => {
+    const btn = e.target.closest('[data-cat]');
     if (!btn) return;
-    activeBrand = btn.dataset.brand;
-    document.querySelectorAll('.brand-tab').forEach(b => b.classList.remove('active'));
+    activeCat = btn.dataset.cat;
+    activeBrand = 'all';
+    document.querySelectorAll('.mega-tab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    // Sync sidebar radio
-    const radio = document.querySelector(`input[name="brand"][value="${activeBrand}"]`);
-    if (radio) radio.checked = true;
+    updateBrandPills();
     applyFilters();
   });
 
-  document.getElementById('apply-filters').addEventListener('click', applyFilters);
+  document.getElementById('apply-btn').addEventListener('click', applyFilters);
   document.getElementById('search-input').addEventListener('input', applyFilters);
 
-  document.getElementById('reset-filters').addEventListener('click', () => {
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    activeCat = 'all';
     activeBrand = 'all';
-    document.querySelectorAll('.brand-tab').forEach(b => b.classList.remove('active'));
-    document.querySelector('.brand-tab[data-brand="all"]').classList.add('active');
-    document.querySelector('input[name="brand"][value="all"]').checked = true;
+    document.querySelectorAll('.mega-tab').forEach(b => b.classList.remove('active'));
+    document.querySelector('.mega-tab[data-cat="all"]').classList.add('active');
     document.querySelector('input[name="price"][value="all"]').checked = true;
     document.getElementById('sort-select').value = 'default';
     document.getElementById('search-input').value = '';
+    updateBrandPills();
     applyFilters();
   });
 
-  // Pre-filter from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const brandParam = urlParams.get('brand');
-  if (brandParam) {
-    activeBrand = brandParam;
-    document.querySelectorAll('.brand-tab').forEach(b => b.classList.remove('active'));
-    const tab = document.querySelector(`.brand-tab[data-brand="${brandParam}"]`);
+  // Handle URL param
+  const urlCat = new URLSearchParams(window.location.search).get('cat');
+  if (urlCat) {
+    activeCat = urlCat;
+    document.querySelectorAll('.mega-tab').forEach(b => b.classList.remove('active'));
+    const tab = document.querySelector(`.mega-tab[data-cat="${urlCat}"]`);
     if (tab) tab.classList.add('active');
-    const radio = document.querySelector(`input[name="brand"][value="${brandParam}"]`);
-    if (radio) radio.checked = true;
   }
 
+  updateTabCounts();
+  updateBrandPills();
   applyFilters();
 </script>
 </body>
