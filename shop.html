@@ -3,15 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shop — TechNova</title>
+<title>AMOS-B Gadget</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  .brand-tabs { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+  .brand-tab {
+    padding:.45rem 1.1rem; border-radius:20px; border:1px solid var(--border);
+    background:transparent; color:var(--text-muted); font-family:var(--font-body);
+    font-size:.85rem; font-weight:600; cursor:pointer;
+    transition:all var(--transition);
+  }
+  .brand-tab:hover { border-color:var(--text-muted); color:var(--text); }
+  .brand-tab.active { background:var(--accent); color:#080b12; border-color:var(--accent); }
+  .brand-tab.apple.active { background:var(--accent); }
+  .brand-tab.samsung.active { background:var(--accent2); border-color:var(--accent2); }
+  .product-count-chip {
+    display:inline-flex; align-items:center; gap:.4rem;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:20px; padding:.3rem .9rem; font-size:.8rem; color:var(--text-muted);
+  }
+  .price-note { font-size:.75rem; color:var(--text-muted); margin-top:.4rem; font-style:italic; }
+</style>
 </head>
 <body>
 
 <nav class="navbar">
-  <a href="index.html" class="logo">AMOS-B<span>GADGET</span></a>
+  <a href="index.html" class="logo">AMOS-B<span>Gadget</span></a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="shop.html" class="active">Shop</a></li>
@@ -24,63 +43,71 @@
 <div class="page-header">
   <div class="container">
     <h1>All Products</h1>
-    <p>Discover our full range of premium gadgets</p>
+    <p>iPhones 7–17 Pro Max & Samsung Galaxy S8–S25 Ultra — real Nigerian market prices</p>
   </div>
 </div>
 
 <section class="shop-section">
   <div class="container shop-layout">
 
-    <!-- Sidebar Filters -->
+    <!-- Sidebar -->
     <aside class="filters">
       <h3>Filters</h3>
 
       <div class="filter-group">
-        <h4>Category</h4>
-        <label><input type="radio" name="cat" value="all" checked> All</label>
-        <label><input type="radio" name="cat" value="phones"> Smartphones</label>
-        <label><input type="radio" name="cat" value="laptops"> Laptops</label>
-        <label><input type="radio" name="cat" value="audio"> Audio</label>
-        <label><input type="radio" name="cat" value="wearables"> Wearables</label>
+        <h4>Brand</h4>
+        <label><input type="radio" name="brand" value="all" checked> All Brands</label>
+        <label><input type="radio" name="brand" value="apple"> 🍎 Apple (iPhone)</label>
+        <label><input type="radio" name="brand" value="samsung"> 🌀 Samsung (Galaxy S)</label>
       </div>
 
       <div class="filter-group">
         <h4>Price Range</h4>
         <label><input type="radio" name="price" value="all" checked> All Prices</label>
-        <label><input type="radio" name="price" value="0-100000"> Under ₦100,000</label>
-        <label><input type="radio" name="price" value="100000-300000"> ₦100k – ₦300k</label>
-        <label><input type="radio" name="price" value="300000-999999"> Above ₦300k</label>
+        <label><input type="radio" name="price" value="0-200000"> Under ₦200k</label>
+        <label><input type="radio" name="price" value="200000-500000"> ₦200k – ₦500k</label>
+        <label><input type="radio" name="price" value="500000-1000000"> ₦500k – ₦1M</label>
+        <label><input type="radio" name="price" value="1000000-9999999"> Above ₦1M</label>
       </div>
 
       <div class="filter-group">
         <h4>Sort By</h4>
         <select id="sort-select">
-          <option value="default">Default</option>
+          <option value="default">Newest First</option>
           <option value="price-asc">Price: Low to High</option>
           <option value="price-desc">Price: High to Low</option>
           <option value="name">Name A–Z</option>
         </select>
       </div>
 
-      <button class="btn-primary" id="apply-filters" style="width:100%; margin-top:1rem;">Apply</button>
+      <button class="btn-primary" id="apply-filters" style="width:100%; margin-top:1rem;">Apply Filters</button>
+      <button id="reset-filters" style="width:100%; margin-top:.5rem; background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:.7rem; border-radius:8px; cursor:pointer; font-family:var(--font-body); font-size:.85rem;">Reset</button>
+
+      <p class="price-note">* Prices reflect current Nigerian market rates (brand-new units, May 2026). Prices may vary by seller.</p>
     </aside>
 
     <!-- Products -->
     <div class="shop-main">
-      <div class="shop-toolbar">
-        <p id="product-count">Showing all products</p>
-        <input type="text" id="search-input" placeholder="Search gadgets..." class="search-box">
+      <div class="shop-toolbar" style="flex-wrap:wrap; gap:.75rem;">
+        <div class="brand-tabs" id="brand-tabs">
+          <button class="brand-tab active" data-brand="all">All</button>
+          <button class="brand-tab apple" data-brand="apple">🍎 iPhones (7–17 Pro Max)</button>
+          <button class="brand-tab samsung" data-brand="samsung">🌀 Samsung S8–S25 Ultra</button>
+        </div>
+        <input type="text" id="search-input" placeholder="Search by model..." class="search-box">
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:.5rem;">
+        <span class="product-count-chip" id="product-count">Loading...</span>
       </div>
       <div class="products-grid" id="shop-products"></div>
     </div>
-
   </div>
 </section>
 
 <footer class="footer">
   <div class="container">
     <div class="footer-bottom">
-      <p>© 2025 TechNova. All rights reserved. <a href="index.html">← Back Home</a></p>
+      <p>© 2025 AMOS-B. All rights reserved. <a href="index.html">← Back Home</a></p>
     </div>
   </div>
 </footer>
@@ -88,38 +115,69 @@
 <script src="data.js"></script>
 <script src="main.js"></script>
 <script>
-  let currentProducts = getAllProducts();
+  let activeBrand = 'all';
 
   function applyFilters() {
-    const cat = document.querySelector('input[name="cat"]:checked').value;
+    const brand = document.querySelector('input[name="brand"]:checked').value;
     const price = document.querySelector('input[name="price"]:checked').value;
     const sort = document.getElementById('sort-select').value;
     const search = document.getElementById('search-input').value.toLowerCase();
 
     let products = getAllProducts();
 
-    if (cat !== 'all') products = products.filter(p => p.category === cat);
+    if (activeBrand !== 'all') products = products.filter(p => p.brand === activeBrand);
+    if (brand !== 'all') products = products.filter(p => p.brand === brand);
     if (price !== 'all') {
       const [min, max] = price.split('-').map(Number);
       products = products.filter(p => p.price >= min && p.price <= max);
     }
-    if (search) products = products.filter(p => p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+    if (search) products = products.filter(p => p.name.toLowerCase().includes(search));
+
     if (sort === 'price-asc') products.sort((a,b) => a.price - b.price);
-    if (sort === 'price-desc') products.sort((a,b) => b.price - a.price);
-    if (sort === 'name') products.sort((a,b) => a.name.localeCompare(b.name));
+    else if (sort === 'price-desc') products.sort((a,b) => b.price - a.price);
+    else if (sort === 'name') products.sort((a,b) => a.name.localeCompare(b.name));
+    else products.sort((a,b) => b.id - a.id);
 
     renderProductGrid('shop-products', products);
-    document.getElementById('product-count').textContent = `Showing ${products.length} products`;
+    document.getElementById('product-count').textContent = products.length + ' product' + (products.length !== 1 ? 's' : '') + ' found';
   }
+
+  // Brand tab clicks
+  document.getElementById('brand-tabs').addEventListener('click', e => {
+    const btn = e.target.closest('[data-brand]');
+    if (!btn) return;
+    activeBrand = btn.dataset.brand;
+    document.querySelectorAll('.brand-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Sync sidebar radio
+    const radio = document.querySelector(`input[name="brand"][value="${activeBrand}"]`);
+    if (radio) radio.checked = true;
+    applyFilters();
+  });
 
   document.getElementById('apply-filters').addEventListener('click', applyFilters);
   document.getElementById('search-input').addEventListener('input', applyFilters);
 
-  // Check URL params for category pre-filter
+  document.getElementById('reset-filters').addEventListener('click', () => {
+    activeBrand = 'all';
+    document.querySelectorAll('.brand-tab').forEach(b => b.classList.remove('active'));
+    document.querySelector('.brand-tab[data-brand="all"]').classList.add('active');
+    document.querySelector('input[name="brand"][value="all"]').checked = true;
+    document.querySelector('input[name="price"][value="all"]').checked = true;
+    document.getElementById('sort-select').value = 'default';
+    document.getElementById('search-input').value = '';
+    applyFilters();
+  });
+
+  // Pre-filter from URL
   const urlParams = new URLSearchParams(window.location.search);
-  const catParam = urlParams.get('cat');
-  if (catParam) {
-    const radio = document.querySelector(`input[name="cat"][value="${catParam}"]`);
+  const brandParam = urlParams.get('brand');
+  if (brandParam) {
+    activeBrand = brandParam;
+    document.querySelectorAll('.brand-tab').forEach(b => b.classList.remove('active'));
+    const tab = document.querySelector(`.brand-tab[data-brand="${brandParam}"]`);
+    if (tab) tab.classList.add('active');
+    const radio = document.querySelector(`input[name="brand"][value="${brandParam}"]`);
     if (radio) radio.checked = true;
   }
 

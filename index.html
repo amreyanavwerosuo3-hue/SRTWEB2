@@ -1,10 +1,9 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AMOS-B GADGET</title>
+<title>AMOS-B Gadget</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -13,7 +12,7 @@
 
 <!-- NAV -->
 <nav class="navbar">
-  <a href="index.html" class="logo">    AMOS-B <span>GADGET</span></a>
+  <a href="index.html" class="logo">AMOS-B<span>Gadget</span></a>
   <ul class="nav-links">
     <li><a href="index.html" class="active">Home</a></li>
     <li><a href="shop.html">Shop</a></li>
@@ -119,7 +118,7 @@
       <div class="perk">
         <div class="perk-icon">🚀</div>
         <h4>Fast Delivery</h4>
-        <p>Delta same-day delivery. Other States within 2–3 days.</p>
+        <p>Delta same-day delivery. Other states within 2–3 days.</p>
       </div>
       <div class="perk">
         <div class="perk-icon">🔒</div>
@@ -145,7 +144,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">AMOS-B <span>GADGET</span></a>
+        <a href="index.html" class="logo">AMOS-B <span>Gadget</span></a>
         <p>Nigeria's premium destination for cutting-edge gadgets and tech accessories.</p>
       </div>
       <div class="footer-links">
@@ -169,14 +168,15 @@
       <div class="footer-links">
         <h5>Contact</h5>
         <ul>
-          <li>Warri Deltastate Nigeria</li>
-          <li>amosbcommunication@gmail.com</li>
+          <li>Delta, Nigeria</li>
+          <li> amosbgadget@gmail.com </li>
           <li>+234 8063816255</li>
+          <li>chat us up 08063816255</li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 AMOS B COMMUNICATION. All rights reserved.</p>
+      <p>© 2025 Amos B Gadget. All rights reserved.</p>
     </div>
   </div>
 </footer>
@@ -184,9 +184,7 @@
 <script src="data.js"></script>
 <script src="main.js"></script>
 <script>
-  renderProductGrid('home-products', getAllProducts().slice(0, 4));
+  renderProductGrid("home-products", getAllProducts().sort((a,b) => b.id - a.id).slice(0, 8));
 </script>
-</body>
-</html>
 </body>
 </html>
