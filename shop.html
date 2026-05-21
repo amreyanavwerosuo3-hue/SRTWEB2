@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — TechNova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="logo">AMOS-B<span>COMMUNICATION</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html" class="active">Shop</a></li>
+    <li><a href="product.html">Featured</a></li>
+    <li><a href="cart.html">Cart <span class="cart-badge" id="cart-count">0</span></a></li>
+  </ul>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h1>All Products</h1>
+    <p>Discover our full range of premium gadgets</p>
+  </div>
+</div>
+
+<section class="shop-section">
+  <div class="container shop-layout">
+
+    <!-- Sidebar Filters -->
+    <aside class="filters">
+      <h3>Filters</h3>
+
+      <div class="filter-group">
+        <h4>Category</h4>
+        <label><input type="radio" name="cat" value="all" checked> All</label>
+        <label><input type="radio" name="cat" value="phones"> Smartphones</label>
+        <label><input type="radio" name="cat" value="laptops"> Laptops</label>
+        <label><input type="radio" name="cat" value="audio"> Audio</label>
+        <label><input type="radio" name="cat" value="wearables"> Wearables</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>Price Range</h4>
+        <label><input type="radio" name="price" value="all" checked> All Prices</label>
+        <label><input type="radio" name="price" value="0-100000"> Under ₦100,000</label>
+        <label><input type="radio" name="price" value="100000-300000"> ₦100k – ₦300k</label>
+        <label><input type="radio" name="price" value="300000-999999"> Above ₦300k</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>Sort By</h4>
+        <select id="sort-select">
+          <option value="default">Default</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </div>
+
+      <button class="btn-primary" id="apply-filters" style="width:100%; margin-top:1rem;">Apply</button>
+    </aside>
+
+    <!-- Products -->
+    <div class="shop-main">
+      <div class="shop-toolbar">
+        <p id="product-count">Showing all products</p>
+        <input type="text" id="search-input" placeholder="Search gadgets..." class="search-box">
+      </div>
+      <div class="products-grid" id="shop-products"></div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2025 TechNova. All rights reserved. <a href="index.html">← Back Home</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+<script>
+  let currentProducts = getAllProducts();
+
+  function applyFilters() {
+    const cat = document.querySelector('input[name="cat"]:checked').value;
+    const price = document.querySelector('input[name="price"]:checked').value;
+    const sort = document.getElementById('sort-select').value;
+    const search = document.getElementById('search-input').value.toLowerCase();
+
+    let products = getAllProducts();
+
+    if (cat !== 'all') products = products.filter(p => p.category === cat);
+    if (price !== 'all') {
+      const [min, max] = price.split('-').map(Number);
+      products = products.filter(p => p.price >= min && p.price <= max);
+    }
+    if (search) products = products.filter(p => p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+    if (sort === 'price-asc') products.sort((a,b) => a.price - b.price);
+    if (sort === 'price-desc') products.sort((a,b) => b.price - a.price);
+    if (sort === 'name') products.sort((a,b) => a.name.localeCompare(b.name));
+
+    renderProductGrid('shop-products', products);
+    document.getElementById('product-count').textContent = `Showing ${products.length} products`;
+  }
+
+  document.getElementById('apply-filters').addEventListener('click', applyFilters);
+  document.getElementById('search-input').addEventListener('input', applyFilters);
+
+  // Check URL params for category pre-filter
+  const urlParams = new URLSearchParams(window.location.search);
+  const catParam = urlParams.get('cat');
+  if (catParam) {
+    const radio = document.querySelector(`input[name="cat"][value="${catParam}"]`);
+    if (radio) radio.checked = true;
+  }
+
+  applyFilters();
+</script>
+</body>
+</html>

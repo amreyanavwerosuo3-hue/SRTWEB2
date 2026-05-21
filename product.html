@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — TechNova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="logo">AMOS-B<span>COMMUNICATION</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="product.html" class="active">Featured</a></li>
+    <li><a href="cart.html">Cart <span class="cart-badge" id="cart-count">0</span></a></li>
+  </ul>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+</nav>
+
+<div class="container" style="padding-top:6rem;">
+  <a href="shop.html" class="back-link">← Back to Shop</a>
+</div>
+
+<section class="product-detail" id="product-detail">
+  <!-- Filled by JS -->
+</section>
+
+<section class="related-section">
+  <div class="container">
+    <h2 class="section-title">You Might Also Like</h2>
+    <div class="products-grid" id="related-products"></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2025 TechNova. All rights reserved. <a href="index.html">← Back Home</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get('id')) || 1;
+  const product = getAllProducts().find(p => p.id === id) || getAllProducts()[0];
+
+  document.title = product.name + ' — TechNova';
+
+  document.getElementById('product-detail').innerHTML = `
+    <div class="container">
+      <div class="product-detail-grid">
+        <div class="product-detail-img">
+          <div class="product-big-img" style="font-size:8rem; text-align:center; padding:3rem; background:var(--surface); border-radius:1.5rem;">
+            ${product.emoji}
+          </div>
+          <div class="product-badges" style="margin-top:1rem; display:flex; gap:.5rem;">
+            <span class="badge">In Stock</span>
+            <span class="badge success">Genuine</span>
+            <span class="badge info">Warranty</span>
+          </div>
+        </div>
+        <div class="product-detail-info">
+          <span class="product-category-tag">${product.category.toUpperCase()}</span>
+          <h1 style="font-size:2.4rem; margin:.5rem 0 1rem;">${product.name}</h1>
+          <div class="stars">★★★★★ <span style="color:var(--text-muted); font-size:.9rem;">(4.8 · 120 reviews)</span></div>
+          <div class="product-price big">₦${product.price.toLocaleString()}</div>
+          <p class="product-desc">${product.description}</p>
+          <ul class="feature-list">
+            ${product.features.map(f => `<li>✓ ${f}</li>`).join('')}
+          </ul>
+          <div class="qty-row">
+            <label>Quantity</label>
+            <div class="qty-control">
+              <button onclick="changeQty(-1)">−</button>
+              <span id="qty-val">1</span>
+              <button onclick="changeQty(1)">+</button>
+            </div>
+          </div>
+          <div class="detail-cta">
+            <button class="btn-primary" onclick="addToCartFromDetail(${product.id})">Add to Cart</button>
+            <a href="cart.html" class="btn-ghost">View Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  let qty = 1;
+  function changeQty(delta) {
+    qty = Math.max(1, qty + delta);
+    document.getElementById('qty-val').textContent = qty;
+  }
+  function addToCartFromDetail(id) {
+    for (let i = 0; i < qty; i++) addToCart(id);
+    showToast(`Added ${qty} × ${product.name} to cart!`);
+  }
+
+  // Related
+  const related = getAllProducts().filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  renderProductGrid('related-products', related.length ? related : getAllProducts().slice(0, 4));
+</script>
+</body>
+</html>
