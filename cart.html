@@ -3,108 +3,1179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product — TechNova</title>
+<title>AMOS-B Gadget</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+/* ============================================
+   CART & CHECKOUT — Full Professional Flow
+   ============================================ */
+
+/* --- STEP INDICATOR --- */
+.checkout-steps {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: .75rem 0;
+}
+.steps-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex: 1;
+  position: relative;
+}
+.step:not(:last-child)::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin: 0 .75rem;
+  transition: background .4s;
+}
+.step.done:not(:last-child)::after { background: var(--accent); }
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head);
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all .3s;
+}
+.step.active .step-num { border-color: var(--accent); background: var(--accent); color: #080b12; }
+.step.done .step-num { border-color: var(--accent); background: var(--accent); color: #080b12; }
+.step.done .step-num::before { content: '✓'; }
+.step-label {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: color .3s;
+}
+.step.active .step-label, .step.done .step-label { color: var(--text); }
+
+/* --- VIEWS --- */
+.view { display: none; padding: 2.5rem 0 5rem; }
+.view.active { display: block; }
+
+/* --- CART VIEW --- */
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2rem;
+  align-items: start;
+}
+.section-heading {
+  font-family: var(--font-head);
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.section-heading span { font-size: .85rem; color: var(--text-muted); font-weight: 400; }
+
+/* Cart Items */
+.cart-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: .75rem;
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  transition: border-color .2s, box-shadow .2s;
+}
+.cart-item:hover { border-color: rgba(255,255,255,.12); box-shadow: 0 4px 24px rgba(0,0,0,.2); }
+
+.cart-item-img {
+  width: 80px; height: 80px;
+  background: var(--surface2);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+.cart-item-info { min-width: 0; }
+.cart-item-info h4 {
+  font-family: var(--font-head);
+  font-size: .95rem;
+  font-weight: 700;
+  margin-bottom: .2rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cart-item-info .item-meta {
+  font-size: .78rem;
+  color: var(--text-muted);
+  margin-bottom: .6rem;
+}
+.item-condition {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 600;
+  padding: .15rem .5rem;
+  border-radius: 4px;
+  background: rgba(0,245,160,.08);
+  color: var(--accent);
+  border: 1px solid rgba(0,245,160,.2);
+  margin-left: .4rem;
+}
+.qty-row-cart {
+  display: flex; align-items: center; gap: .6rem;
+}
+.qty-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .18s, border-color .18s;
+}
+.qty-btn:hover { background: var(--accent); color: #080b12; border-color: var(--accent); }
+.qty-val {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: .9rem;
+  min-width: 24px;
+  text-align: center;
+}
+.remove-item-btn {
+  background: none; border: none; color: var(--text-muted);
+  font-size: .8rem; cursor: pointer; padding: .3rem .5rem;
+  border-radius: 4px;
+  transition: color .18s, background .18s;
+  margin-left: .5rem;
+}
+.remove-item-btn:hover { color: #ff5252; background: rgba(255,82,82,.08); }
+
+.cart-item-right { text-align: right; }
+.item-price {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.save-later {
+  font-size: .75rem;
+  color: var(--accent2);
+  cursor: pointer;
+  transition: opacity .18s;
+}
+.save-later:hover { opacity: .7; }
+
+/* Saved items */
+.saved-section { margin-top: 2rem; }
+.saved-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .75rem; }
+.saved-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  text-align: center;
+}
+.saved-card .s-emoji { font-size: 2.2rem; margin-bottom: .5rem; }
+.saved-card h5 { font-size: .8rem; font-weight: 700; margin-bottom: .3rem; line-height: 1.3; }
+.saved-card .s-price { font-size: .8rem; color: var(--accent); font-weight: 700; margin-bottom: .6rem; }
+.move-to-cart-btn {
+  background: transparent; border: 1px solid var(--accent); color: var(--accent);
+  border-radius: 6px; padding: .3rem .7rem; font-size: .75rem; font-weight: 600;
+  cursor: pointer; width: 100%; font-family: var(--font-body); transition: all .18s;
+}
+.move-to-cart-btn:hover { background: var(--accent); color: #080b12; }
+
+/* --- ORDER SUMMARY BOX --- */
+.order-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: sticky;
+  top: calc(70px + 1rem);
+}
+.order-summary-head {
+  background: var(--surface2);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.order-summary-head h3 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; }
+.order-summary-body { padding: 1.25rem; }
+.summary-line {
+  display: flex; justify-content: space-between;
+  font-size: .88rem;
+  padding: .45rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.summary-line:last-of-type { border-bottom: none; }
+.summary-line.total-line {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text);
+  padding-top: .75rem;
+  margin-top: .25rem;
+  border-top: 2px solid var(--border);
+}
+.summary-line .green { color: var(--accent); font-weight: 700; }
+
+.promo-wrap { margin: 1rem 0; display: flex; gap: .5rem; }
+.promo-wrap input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); padding: .55rem .8rem;
+  font-size: .85rem; font-family: var(--font-body);
+}
+.promo-wrap input:focus { outline: none; border-color: var(--accent); }
+.promo-wrap button {
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: .55rem 1rem; font-size: .85rem;
+  cursor: pointer; font-family: var(--font-body); font-weight: 600; transition: all .18s;
+}
+.promo-wrap button:hover { background: var(--accent); border-color: var(--accent); color: #080b12; }
+.promo-success { font-size: .78rem; color: var(--accent); margin-top: -.5rem; margin-bottom: .5rem; }
+
+.trust-badges {
+  display: flex; flex-direction: column; gap: .4rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem; margin-top: 1rem;
+}
+.trust-badge { display: flex; align-items: center; gap: .5rem; font-size: .78rem; color: var(--text-muted); }
+.trust-badge span { font-size: 1rem; }
+
+/* --- CHECKOUT VIEW --- */
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 2rem;
+  align-items: start;
+}
+.checkout-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+.checkout-card-head {
+  display: flex; align-items: center; gap: .75rem;
+  margin-bottom: 1.5rem;
+}
+.checkout-card-head .card-icon {
+  width: 36px; height: 36px;
+  background: rgba(0,245,160,.1);
+  border: 1px solid rgba(0,245,160,.2);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.checkout-card-head h3 { font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; }
+
+/* Form */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-grid.full { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: .35rem; }
+.form-group.span2 { grid-column: span 2; }
+.form-group label { font-size: .78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
+.form-group input, .form-group select, .form-group textarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: .7rem .9rem;
+  font-size: .9rem;
+  font-family: var(--font-body);
+  transition: border-color .18s, box-shadow .18s;
+  width: 100%;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,245,160,.1);
+}
+.form-group input.error { border-color: #ff5252; }
+.form-group input::placeholder { color: var(--text-muted); }
+.form-group select option { background: var(--surface); }
+.field-error { font-size: .75rem; color: #ff5252; margin-top: -.2rem; display: none; }
+.field-error.show { display: block; }
+
+/* Delivery options */
+.delivery-options { display: flex; flex-direction: column; gap: .75rem; }
+.delivery-opt {
+  display: flex; align-items: center; gap: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+.delivery-opt:hover { border-color: var(--text-muted); }
+.delivery-opt input[type="radio"] { accent-color: var(--accent); flex-shrink: 0; }
+.delivery-opt.selected { border-color: var(--accent); background: rgba(0,245,160,.04); }
+.delivery-opt-info { flex: 1; }
+.delivery-opt-name { font-weight: 600; font-size: .9rem; }
+.delivery-opt-desc { font-size: .78rem; color: var(--text-muted); margin-top: .15rem; }
+.delivery-opt-price { font-family: var(--font-head); font-weight: 700; font-size: .95rem; color: var(--accent); }
+
+/* Payment tabs */
+.payment-tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.pay-tab {
+  display: flex; align-items: center; gap: .4rem;
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: .6rem 1rem;
+  cursor: pointer; background: transparent;
+  color: var(--text-muted); font-size: .85rem; font-weight: 600;
+  font-family: var(--font-body); transition: all .18s;
+}
+.pay-tab:hover { border-color: var(--text-muted); color: var(--text); }
+.pay-tab.active { border-color: var(--accent); background: rgba(0,245,160,.08); color: var(--text); }
+.pay-tab .pay-icon { font-size: 1.1rem; }
+.pay-panel { display: none; }
+.pay-panel.active { display: block; }
+
+.card-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.card-icons { display: flex; gap: .4rem; margin-top: .5rem; flex-wrap: wrap; }
+.card-icon-badge {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 4px; padding: .2rem .5rem; font-size: .7rem; color: var(--text-muted); font-weight: 600;
+}
+.bank-transfer-info {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem;
+}
+.bank-line { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
+.bank-line:last-child { border-bottom: none; }
+.bank-line .label { color: var(--text-muted); }
+.bank-line .value { font-weight: 700; }
+.copy-btn {
+  background: transparent; border: 1px solid var(--border); color: var(--accent);
+  border-radius: 4px; padding: .15rem .5rem; font-size: .72rem; cursor: pointer;
+  font-family: var(--font-body); transition: all .18s;
+}
+.copy-btn:hover { background: var(--accent); color: #080b12; border-color: var(--accent); }
+
+/* Order mini summary (right col on checkout) */
+.checkout-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  position: sticky;
+  top: calc(70px + 1rem);
+  overflow: hidden;
+}
+.checkout-summary-head {
+  background: var(--surface2); padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-head); font-weight: 700; font-size: .95rem;
+}
+.checkout-summary-body { padding: 1.25rem; }
+.mini-cart-item {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .6rem 0; border-bottom: 1px solid var(--border);
+  font-size: .85rem;
+}
+.mini-cart-item:last-of-type { border-bottom: none; }
+.mini-emoji { font-size: 1.6rem; flex-shrink: 0; }
+.mini-name { flex: 1; font-weight: 600; line-height: 1.3; font-size: .8rem; }
+.mini-qty { color: var(--text-muted); font-size: .75rem; }
+.mini-price { font-weight: 700; color: var(--accent); font-size: .85rem; white-space: nowrap; }
+
+/* --- CONFIRM VIEW --- */
+.confirm-view { max-width: 640px; margin: 0 auto; text-align: center; padding: 4rem 1.5rem; }
+.confirm-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(0,245,160,.12); border: 2px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem; margin: 0 auto 1.5rem;
+  animation: popIn .5s cubic-bezier(.175,.885,.32,1.275) forwards;
+}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.confirm-view h1 { font-family: var(--font-head); font-size: 2rem; font-weight: 800; margin-bottom: .75rem; }
+.confirm-view p { color: var(--text-muted); line-height: 1.7; max-width: 480px; margin: 0 auto 2rem; }
+.order-ref {
+  background: var(--surface); border: 1px solid var(--accent);
+  border-radius: 10px; padding: 1.25rem 2rem; display: inline-block;
+  font-family: var(--font-head); font-size: 1.3rem; font-weight: 800;
+  color: var(--accent); letter-spacing: 2px; margin-bottom: 2rem;
+}
+.confirm-steps {
+  display: flex; flex-direction: column; gap: .75rem; text-align: left;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem;
+}
+.confirm-step {
+  display: flex; align-items: center; gap: 1rem; font-size: .88rem;
+}
+.confirm-step .cs-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(0,245,160,.1); border: 1px solid rgba(0,245,160,.3);
+  color: var(--accent); font-weight: 700; font-size: .8rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.confirm-step p { color: var(--text-muted); margin: 0; }
+.confirm-step strong { color: var(--text); }
+
+/* Empty cart */
+.empty-cart {
+  text-align: center; padding: 5rem 2rem;
+}
+.empty-cart .empty-icon { font-size: 5rem; margin-bottom: 1rem; opacity: .5; }
+.empty-cart h2 { font-family: var(--font-head); font-size: 1.6rem; margin-bottom: .5rem; }
+.empty-cart p { color: var(--text-muted); margin-bottom: 2rem; }
+
+/* Nav CTA  */
+.nav-cta-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+}
+.continue-link { color: var(--text-muted); font-size: .88rem; transition: color .18s; }
+.continue-link:hover { color: var(--accent); }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .cart-layout, .checkout-layout { grid-template-columns: 1fr; }
+  .order-summary, .checkout-summary { position: static; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.span2 { grid-column: span 1; }
+  .card-field-row { grid-template-columns: 1fr; }
+  .steps-inner { gap: 0; }
+  .step-label { display: none; }
+}
+@media (max-width: 560px) {
+  .cart-item { grid-template-columns: 60px 1fr; }
+  .cart-item-right { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; }
+}
+</style>
 </head>
 <body>
 
 <nav class="navbar">
-  <a href="index.html" class="logo">AMOS-B<span>GADGET</span></a>
+  <a href="index.html" class="logo">AMOS-B <span>Gadget</span></a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="shop.html">Shop</a></li>
-    <li><a href="product.html" class="active">Featured</a></li>
-    <li><a href="cart.html">Cart <span class="cart-badge" id="cart-count">0</span></a></li>
+    <li><a href="product.html">Featured</a></li>
+    <li><a href="cart.html" class="active">Cart <span class="cart-badge" id="cart-count">0</span></a></li>
   </ul>
   <button class="hamburger" id="hamburger">&#9776;</button>
 </nav>
 
-<div class="container" style="padding-top:6rem;">
-  <a href="shop.html" class="back-link">← Back to Shop</a>
-</div>
-
-<section class="product-detail" id="product-detail">
-  <!-- Filled by JS -->
-</section>
-
-<section class="related-section">
-  <div class="container">
-    <h2 class="section-title">You Might Also Like</h2>
-    <div class="products-grid" id="related-products"></div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="container">
-    <div class="footer-bottom">
-      <p>© 2025 TechNova. All rights reserved. <a href="index.html">← Back Home</a></p>
+<!-- STEP INDICATOR -->
+<div class="checkout-steps">
+  <div class="steps-inner">
+    <div class="step active" id="step-1">
+      <div class="step-num">1</div>
+      <div class="step-label">Cart</div>
+    </div>
+    <div class="step" id="step-2">
+      <div class="step-num">2</div>
+      <div class="step-label">Delivery</div>
+    </div>
+    <div class="step" id="step-3">
+      <div class="step-num">3</div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="step" id="step-4">
+      <div class="step-num">4</div>
+      <div class="step-label">Confirm</div>
     </div>
   </div>
-</footer>
+</div>
 
-<script src="data.js"></script>
-<script src="main.js"></script>
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const id = parseInt(params.get('id')) || 1;
-  const product = getAllProducts().find(p => p.id === id) || getAllProducts()[0];
+<!-- =================== VIEW 1: CART =================== -->
+<div class="view active" id="view-cart">
+  <div class="container">
+    <div class="nav-cta-bar">
+      <a href="shop.html" class="continue-link">← Continue Shopping</a>
+    </div>
 
-  document.title = product.name + ' — TechNova';
+    <div id="empty-cart-msg" class="empty-cart" style="display:none;">
+      <div class="empty-icon">🛒</div>
+      <h2>Your cart is empty</h2>
+      <p>Add some amazing gadgets to get started!</p>
+      <a href="shop.html" class="btn-primary">Browse Products</a>
+    </div>
 
-  document.getElementById('product-detail').innerHTML = `
-    <div class="container">
-      <div class="product-detail-grid">
-        <div class="product-detail-img">
-          <div class="product-big-img" style="font-size:8rem; text-align:center; padding:3rem; background:var(--surface); border-radius:1.5rem;">
-            ${product.emoji}
-          </div>
-          <div class="product-badges" style="margin-top:1rem; display:flex; gap:.5rem;">
-            <span class="badge">In Stock</span>
-            <span class="badge success">Genuine</span>
-            <span class="badge info">Warranty</span>
-          </div>
+    <div id="cart-content" class="cart-layout">
+      <!-- LEFT: Items -->
+      <div>
+        <h2 class="section-heading">Your Cart <span id="cart-item-count"></span></h2>
+        <div id="cart-items-list"></div>
+
+        <!-- Saved for Later -->
+        <div class="saved-section" id="saved-section" style="display:none;">
+          <h3 class="section-heading" style="font-size:1.1rem;">Saved for Later <span id="saved-count"></span></h3>
+          <div class="saved-grid" id="saved-items-list"></div>
         </div>
-        <div class="product-detail-info">
-          <span class="product-category-tag">${product.category.toUpperCase()}</span>
-          <h1 style="font-size:2.4rem; margin:.5rem 0 1rem;">${product.name}</h1>
-          <div class="stars">★★★★★ <span style="color:var(--text-muted); font-size:.9rem;">(4.8 · 120 reviews)</span></div>
-          <div class="product-price big">₦${product.price.toLocaleString()}</div>
-          <p class="product-desc">${product.description}</p>
-          <ul class="feature-list">
-            ${product.features.map(f => `<li>✓ ${f}</li>`).join('')}
-          </ul>
-          <div class="qty-row">
-            <label>Quantity</label>
-            <div class="qty-control">
-              <button onclick="changeQty(-1)">−</button>
-              <span id="qty-val">1</span>
-              <button onclick="changeQty(1)">+</button>
-            </div>
+      </div>
+
+      <!-- RIGHT: Order Summary -->
+      <div>
+        <div class="order-summary">
+          <div class="order-summary-head">
+            <h3>Order Summary</h3>
           </div>
-          <div class="detail-cta">
-            <button class="btn-primary" onclick="addToCartFromDetail(${product.id})">Add to Cart</button>
-            <a href="cart.html" class="btn-ghost">View Cart</a>
+          <div class="order-summary-body">
+            <div class="summary-line"><span>Subtotal</span><span id="s-subtotal">₦0</span></div>
+            <div class="summary-line"><span>Discount</span><span class="green" id="s-discount">—</span></div>
+            <div class="summary-line"><span>Shipping</span><span id="s-shipping">—</span></div>
+            <div class="summary-line"><span>VAT (7.5%)</span><span id="s-vat">₦0</span></div>
+            <div class="summary-line total-line"><span>Total</span><span id="s-total">₦0</span></div>
+
+            <div class="promo-wrap">
+              <input type="text" id="promo-code" placeholder="Promo / coupon code">
+              <button onclick="applyPromo()">Apply</button>
+            </div>
+            <p class="promo-success" id="promo-msg" style="display:none;"></p>
+
+            <button class="btn-primary" style="width:100%; margin-bottom:.6rem;" onclick="goToCheckout()">
+              Proceed to Checkout →
+            </button>
+            <button class="btn-ghost" style="width:100%; font-size:.85rem;" onclick="window.location='shop.html'">
+              Continue Shopping
+            </button>
+
+            <div class="trust-badges">
+              <div class="trust-badge"><span>🔒</span> Secure 256-bit SSL checkout</div>
+              <div class="trust-badge"><span>✅</span> 100% Genuine, verified products</div>
+              <div class="trust-badge"><span>🔄</span> 7-day hassle-free returns</div>
+              <div class="trust-badge"><span>🚀</span> Lagos same-day · 2–3 days nationwide</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  `;
+  </div>
+</div>
 
-  let qty = 1;
-  function changeQty(delta) {
-    qty = Math.max(1, qty + delta);
-    document.getElementById('qty-val').textContent = qty;
-  }
-  function addToCartFromDetail(id) {
-    for (let i = 0; i < qty; i++) addToCart(id);
-    showToast(`Added ${qty} × ${product.name} to cart!`);
+<!-- =================== VIEW 2: DELIVERY =================== -->
+<div class="view" id="view-delivery">
+  <div class="container">
+    <div class="nav-cta-bar">
+      <a href="#" class="continue-link" onclick="goTo('cart')">← Back to Cart</a>
+    </div>
+    <div class="checkout-layout">
+      <div>
+        <!-- Contact -->
+        <div class="checkout-card">
+          <div class="checkout-card-head">
+            <div class="card-icon">👤</div>
+            <h3>Contact Information</h3>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="f-fname" placeholder="Emeka">
+              <p class="field-error" id="e-fname">Please enter your first name</p>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="f-lname" placeholder="Okonkwo">
+              <p class="field-error" id="e-lname">Please enter your last name</p>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="f-email" placeholder="emeka@email.com">
+              <p class="field-error" id="e-email">Please enter a valid email</p>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="f-phone" placeholder="+234 801 234 5678">
+              <p class="field-error" id="e-phone">Please enter your phone number</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="checkout-card">
+          <div class="checkout-card-head">
+            <div class="card-icon">📍</div>
+            <h3>Delivery Address</h3>
+          </div>
+          <div class="form-grid">
+            <div class="form-group span2">
+              <label>Street Address</label>
+              <input type="text" id="f-address" placeholder="12 Adeola Odeku Street, Victoria Island">
+              <p class="field-error" id="e-address">Please enter your address</p>
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" id="f-city" placeholder="Lagos">
+              <p class="field-error" id="e-city">Please enter your city</p>
+            </div>
+            <div class="form-group">
+              <label>State</label>
+              <select id="f-state">
+                <option value="">Select state...</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Abuja">Abuja (FCT)</option>
+                <option value="Rivers">Rivers</option>
+                <option value="Kano">Kano</option>
+                <option value="Oyo">Oyo</option>
+                <option value="Anambra">Anambra</option>
+                <option value="Enugu">Enugu</option>
+                <option value="Delta">Delta</option>
+                <option value="Edo">Edo</option>
+                <option value="Kaduna">Kaduna</option>
+                <option value="Other">Other State</option>
+              </select>
+              <p class="field-error" id="e-state">Please select your state</p>
+            </div>
+            <div class="form-group span2">
+              <label>Delivery Note (optional)</label>
+              <textarea id="f-note" placeholder="Gate colour, landmark, or any special instructions..." rows="2" style="resize:vertical;"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery Options -->
+        <div class="checkout-card">
+          <div class="checkout-card-head">
+            <div class="card-icon">🚚</div>
+            <h3>Delivery Method</h3>
+          </div>
+          <div class="delivery-options" id="delivery-options">
+            <label class="delivery-opt selected">
+              <input type="radio" name="delivery" value="standard" checked>
+              <div class="delivery-opt-info">
+                <div class="delivery-opt-name">Standard Delivery</div>
+                <div class="delivery-opt-desc">Lagos: 1–2 days · Other states: 2–4 days</div>
+              </div>
+              <div class="delivery-opt-price" id="std-price">₦3,500</div>
+            </label>
+            <label class="delivery-opt">
+              <input type="radio" name="delivery" value="express">
+              <div class="delivery-opt-info">
+                <div class="delivery-opt-name">Express Delivery</div>
+                <div class="delivery-opt-desc">Lagos same-day · Other states: next day</div>
+              </div>
+              <div class="delivery-opt-price">₦7,500</div>
+            </label>
+            <label class="delivery-opt">
+              <input type="radio" name="delivery" value="pickup">
+              <div class="delivery-opt-info">
+                <div class="delivery-opt-name">Store Pickup — Free</div>
+                <div class="delivery-opt-desc">12 Oshitelu St, Ikeja, Lagos · Mon–Sat 8am–6pm</div>
+              </div>
+              <div class="delivery-opt-price">Free</div>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="width:100%; padding:1rem;" onclick="validateDelivery()">
+          Continue to Payment →
+        </button>
+      </div>
+
+      <!-- Right: Mini summary -->
+      <div class="checkout-summary">
+        <div class="checkout-summary-head">Order Summary</div>
+        <div class="checkout-summary-body">
+          <div id="mini-cart-items"></div>
+          <div class="summary-line" style="margin-top:.75rem;"><span>Subtotal</span><span id="cs-subtotal">₦0</span></div>
+          <div class="summary-line"><span>Shipping</span><span id="cs-shipping">—</span></div>
+          <div class="summary-line total-line"><span>Total</span><span id="cs-total">₦0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== VIEW 3: PAYMENT =================== -->
+<div class="view" id="view-payment">
+  <div class="container">
+    <div class="nav-cta-bar">
+      <a href="#" class="continue-link" onclick="goTo('delivery')">← Back to Delivery</a>
+    </div>
+    <div class="checkout-layout">
+      <div>
+        <div class="checkout-card">
+          <div class="checkout-card-head">
+            <div class="card-icon">💳</div>
+            <h3>Payment Method</h3>
+          </div>
+
+          <!-- Pay tabs -->
+          <div class="payment-tabs">
+            <button class="pay-tab active" onclick="switchPayTab('card', this)"><span class="pay-icon">💳</span> Debit / Credit Card</button>
+            <button class="pay-tab" onclick="switchPayTab('transfer', this)"><span class="pay-icon">🏦</span> Bank Transfer</button>
+            <button class="pay-tab" onclick="switchPayTab('paystack', this)"><span class="pay-icon">🟢</span> Paystack</button>
+            <button class="pay-tab" onclick="switchPayTab('opay', this)"><span class="pay-icon">📱</span> OPay / USSD</button>
+          </div>
+
+          <!-- Card panel -->
+          <div class="pay-panel active" id="panel-card">
+            <div class="form-grid">
+              <div class="form-group span2">
+                <label>Cardholder Name</label>
+                <input type="text" id="f-card-name" placeholder="EMEKA OKONKWO">
+              </div>
+              <div class="form-group span2">
+                <label>Card Number</label>
+                <input type="text" id="f-card-num" placeholder="0000  0000  0000  0000" maxlength="19" oninput="formatCard(this)">
+              </div>
+              <div class="form-group">
+                <label>Expiry Date</label>
+                <input type="text" id="f-card-exp" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+              </div>
+              <div class="form-group">
+                <label>CVV</label>
+                <input type="text" id="f-card-cvv" placeholder="•••" maxlength="4" type="password">
+              </div>
+            </div>
+            <div class="card-icons">
+              <span class="card-icon-badge">VISA</span>
+              <span class="card-icon-badge">Mastercard</span>
+              <span class="card-icon-badge">Verve</span>
+              <span class="card-icon-badge">3D Secure</span>
+            </div>
+          </div>
+
+          <!-- Bank Transfer panel -->
+          <div class="pay-panel" id="panel-transfer">
+            <div class="bank-transfer-info">
+              <div class="bank-line"><span class="label">Bank Name</span><span class="value">Guaranty Trust Bank (GTB)</span></div>
+              <div class="bank-line"><span class="label">Account Number</span><span class="value">0123456789 <button class="copy-btn" onclick="copyText('0123456789')">Copy</button></span></div>
+              <div class="bank-line"><span class="label">Account Name</span><span class="value">TechNova Gadgets Ltd</span></div>
+              <div class="bank-line"><span class="label">Amount to Pay</span><span class="value" style="color:var(--accent);" id="transfer-amount">₦0</span></div>
+            </div>
+            <p style="font-size:.8rem; color:var(--text-muted); margin-top:1rem; line-height:1.6;">
+              ⚠️ Transfer the exact amount shown above. Your order will be processed within 1–2 hours of payment confirmation. Include your name as narration.
+            </p>
+          </div>
+
+          <!-- Paystack panel -->
+          <div class="pay-panel" id="panel-paystack">
+            <div style="text-align:center; padding:2rem 1rem;">
+              <div style="font-size:3rem; margin-bottom:1rem;">🟢</div>
+              <p style="margin-bottom:1.5rem; color:var(--text-muted);">You'll be redirected to Paystack's secure checkout to complete your payment.</p>
+              <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:1rem; font-size:.85rem;">
+                <strong>Total to pay:</strong> <span style="color:var(--accent); font-family:var(--font-head); font-size:1.1rem;" id="paystack-amount">₦0</span>
+              </div>
+              <p style="font-size:.75rem; color:var(--text-muted); margin-top:.75rem;">Supports cards, bank transfer, USSD, mobile money.</p>
+            </div>
+          </div>
+
+          <!-- OPay / USSD panel -->
+          <div class="pay-panel" id="panel-opay">
+            <div style="display:flex; flex-direction:column; gap:.75rem;">
+              <div class="bank-transfer-info">
+                <div class="bank-line"><span class="label">OPay</span><span class="value">07025012345</span></div>
+                <div class="bank-line"><span class="label">USSD (GTB)</span><span class="value">*737*1*Amount*4120#</span></div>
+                <div class="bank-line"><span class="label">USSD (Access)</span><span class="value">*901*Amount*4120#</span></div>
+                <div class="bank-line"><span class="label">USSD (Zenith)</span><span class="value">*966*Amount*4120#</span></div>
+              </div>
+              <p style="font-size:.8rem; color:var(--text-muted); line-height:1.6;">Dial the USSD code for your bank and follow the prompts. Send payment confirmation to 0900 000 0000 on WhatsApp.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing address -->
+        <div class="checkout-card">
+          <div class="checkout-card-head">
+            <div class="card-icon">📋</div>
+            <h3>Billing Address</h3>
+          </div>
+          <label style="display:flex; align-items:center; gap:.6rem; cursor:pointer; margin-bottom:1rem; font-size:.9rem;">
+            <input type="checkbox" id="same-address" checked style="accent-color:var(--accent);"> Same as delivery address
+          </label>
+          <div id="billing-fields" style="display:none;">
+            <div class="form-grid">
+              <div class="form-group span2">
+                <label>Billing Address</label>
+                <input type="text" id="f-bill-address" placeholder="Street address">
+              </div>
+              <div class="form-group">
+                <label>City</label>
+                <input type="text" id="f-bill-city" placeholder="City">
+              </div>
+              <div class="form-group">
+                <label>State</label>
+                <input type="text" id="f-bill-state" placeholder="State">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(0,245,160,.05); border:1px solid rgba(0,245,160,.15); border-radius:10px; padding:1rem; margin-bottom:1.25rem; font-size:.82rem; color:var(--text-muted); line-height:1.6;">
+          🔒 Your payment information is encrypted with 256-bit SSL. TechNova never stores your card details.
+        </div>
+
+        <button class="btn-primary" style="width:100%; padding:1.1rem; font-size:1rem;" onclick="placeOrder()">
+          🛒 Place Order — <span id="final-total-btn">₦0</span>
+        </button>
+      </div>
+
+      <!-- Mini summary right -->
+      <div class="checkout-summary">
+        <div class="checkout-summary-head">Your Order</div>
+        <div class="checkout-summary-body">
+          <div id="mini-cart-items-2"></div>
+          <div class="summary-line" style="margin-top:.75rem;"><span>Subtotal</span><span id="cs2-subtotal">₦0</span></div>
+          <div class="summary-line"><span>Shipping</span><span id="cs2-shipping">—</span></div>
+          <div class="summary-line"><span>VAT (7.5%)</span><span id="cs2-vat">₦0</span></div>
+          <div class="summary-line total-line"><span>Total</span><span id="cs2-total">₦0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== VIEW 4: CONFIRMATION =================== -->
+<div class="view" id="view-confirm">
+  <div class="container">
+    <div class="confirm-view">
+      <div class="confirm-icon">✅</div>
+      <h1>Order Placed!</h1>
+      <p>Thank you for shopping with TechNova. Your order has been received and is being processed. You'll receive a confirmation email shortly.</p>
+      <div class="order-ref" id="order-ref-num">TN-000000</div>
+
+      <div class="confirm-steps">
+        <div class="confirm-step">
+          <div class="cs-num">1</div>
+          <p><strong>Order Received</strong> — We've got your order and are verifying payment.</p>
+        </div>
+        <div class="confirm-step">
+          <div class="cs-num">2</div>
+          <p><strong>Processing</strong> — Your gadget is being packaged (1–4 hours).</p>
+        </div>
+        <div class="confirm-step">
+          <div class="cs-num">3</div>
+          <p><strong>Shipped</strong> — A tracking number will be sent to your email/WhatsApp.</p>
+        </div>
+        <div class="confirm-step">
+          <div class="cs-num">4</div>
+          <p><strong>Delivered</strong> — Lagos same-day · Other states 2–4 days.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="shop.html" class="btn-primary">Continue Shopping</a>
+        <a href="index.html" class="btn-ghost">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+<script>
+/* =============================================
+   CART & CHECKOUT LOGIC
+   ============================================= */
+
+let savedItems  = JSON.parse(localStorage.getItem('tn_saved') || '[]');
+let promoApplied = false;
+let discountAmt  = 0;
+let selectedDelivery = 'standard';
+let deliveryCost = 3500;
+let currentView  = 'cart';
+
+// ---- HELPERS ----
+const fmt = n => '₦' + Number(n).toLocaleString();
+const products = getAllProducts();
+const getProduct = id => products.find(p => p.id === id);
+
+function generateOrderRef() {
+  return 'TN-' + Date.now().toString(36).toUpperCase().slice(-6);
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast('Copied: ' + text));
+}
+
+// ---- CART DATA ----
+function getCartItems() {
+  return getCart().map(item => {
+    const p = getProduct(item.id);
+    return p ? { ...item, product: p } : null;
+  }).filter(Boolean);
+}
+
+function calcTotals() {
+  const items = getCartItems();
+  const subtotal = items.reduce((s, i) => s + i.product.price * i.qty, 0);
+  const discount = promoApplied ? discountAmt : 0;
+  const afterDiscount = subtotal - discount;
+  const vat = Math.round(afterDiscount * 0.075);
+  const total = afterDiscount + vat + (selectedDelivery === 'pickup' ? 0 : deliveryCost);
+  return { subtotal, discount, afterDiscount, vat, total, shipping: selectedDelivery === 'pickup' ? 0 : deliveryCost };
+}
+
+// ---- RENDER CART ----
+function renderCart() {
+  const items = getCartItems();
+  const saved = savedItems.map(id => getProduct(id)).filter(Boolean);
+  const { subtotal, discount, vat, total, shipping } = calcTotals();
+
+  // Empty state
+  const isEmpty = items.length === 0;
+  document.getElementById('empty-cart-msg').style.display = isEmpty ? 'block' : 'none';
+  document.getElementById('cart-content').style.display  = isEmpty ? 'none' : 'grid';
+  if (isEmpty) return;
+
+  document.getElementById('cart-item-count').textContent = `(${items.reduce((s,i)=>s+i.qty,0)} items)`;
+
+  // Items
+  document.getElementById('cart-items-list').innerHTML = items.map(item => `
+    <div class="cart-item" id="ci-${item.id}">
+      <div class="cart-item-img">${item.product.emoji}</div>
+      <div class="cart-item-info">
+        <h4>${item.product.name} <span class="item-condition">Brand New</span></h4>
+        <div class="item-meta">${item.product.brand ? item.product.brand.charAt(0).toUpperCase()+item.product.brand.slice(1) : ''} · ${item.product.category}</div>
+        <div class="qty-row-cart">
+          <button class="qty-btn" onclick="updateQty(${item.id}, ${item.qty-1})">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty(${item.id}, ${item.qty+1})">+</button>
+          <button class="remove-item-btn" onclick="updateQty(${item.id}, 0)">Remove</button>
+          <button class="remove-item-btn" onclick="saveForLater(${item.id})" style="color:var(--accent2);">Save for later</button>
+        </div>
+      </div>
+      <div class="cart-item-right">
+        <div class="item-price">${fmt(item.product.price * item.qty)}</div>
+        <div style="font-size:.78rem; color:var(--text-muted);">${fmt(item.product.price)} each</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Summary
+  document.getElementById('s-subtotal').textContent = fmt(subtotal);
+  document.getElementById('s-discount').textContent = discount > 0 ? '−' + fmt(discount) : '—';
+  document.getElementById('s-shipping').textContent = shipping === 0 ? 'Free' : fmt(shipping);
+  document.getElementById('s-vat').textContent = fmt(vat);
+  document.getElementById('s-total').textContent = fmt(total);
+
+  // Saved
+  const savedSection = document.getElementById('saved-section');
+  if (saved.length > 0) {
+    savedSection.style.display = 'block';
+    document.getElementById('saved-count').textContent = `(${saved.length})`;
+    document.getElementById('saved-items-list').innerHTML = saved.map(p => `
+      <div class="saved-card">
+        <div class="s-emoji">${p.emoji}</div>
+        <h5>${p.name}</h5>
+        <div class="s-price">${fmt(p.price)}</div>
+        <button class="move-to-cart-btn" onclick="moveToCart(${p.id})">Move to Cart</button>
+      </div>
+    `).join('');
+  } else {
+    savedSection.style.display = 'none';
   }
 
-  // Related
-  const related = getAllProducts().filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
-  renderProductGrid('related-products', related.length ? related : getAllProducts().slice(0, 4));
+  updateCartBadge();
+}
+
+function updateQty(id, newQty) {
+  let cart = getCart();
+  if (newQty <= 0) cart = cart.filter(i => i.id !== id);
+  else { const item = cart.find(i=>i.id===id); if(item) item.qty=newQty; }
+  localStorage.setItem('tn_cart', JSON.stringify(cart));
+  updateCartBadge();
+  renderCart();
+}
+
+function saveForLater(id) {
+  if (!savedItems.includes(id)) savedItems.push(id);
+  localStorage.setItem('tn_saved', JSON.stringify(savedItems));
+  updateQty(id, 0);
+  showToast('Saved for later');
+}
+
+function moveToCart(id) {
+  savedItems = savedItems.filter(s => s !== id);
+  localStorage.setItem('tn_saved', JSON.stringify(savedItems));
+  addToCart(id);
+  renderCart();
+  showToast('Moved to cart!');
+}
+
+function applyPromo() {
+  const code = document.getElementById('promo-code').value.trim().toUpperCase();
+  const msg = document.getElementById('promo-msg');
+  const promos = { 'NOVA10': .10, 'TECH15': .15, 'SAVE5K': null };
+
+  if (code === 'NOVA10') {
+    discountAmt = Math.round(calcTotals().subtotal * 0.10);
+    promoApplied = true;
+    msg.textContent = '🎉 NOVA10 applied — 10% off!'; msg.style.display='block'; msg.style.color='var(--accent)';
+  } else if (code === 'TECH15') {
+    discountAmt = Math.round(calcTotals().subtotal * 0.15);
+    promoApplied = true;
+    msg.textContent = '🎉 TECH15 applied — 15% off!'; msg.style.display='block'; msg.style.color='var(--accent)';
+  } else if (code === 'SAVE5K') {
+    discountAmt = 5000; promoApplied = true;
+    msg.textContent = '🎉 SAVE5K applied — ₦5,000 off!'; msg.style.display='block'; msg.style.color='var(--accent)';
+  } else {
+    promoApplied = false; discountAmt = 0;
+    msg.textContent = '❌ Invalid promo code'; msg.style.display='block'; msg.style.color='#ff5252';
+  }
+  renderCart();
+}
+
+// ---- NAVIGATION ----
+function goTo(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  currentView = view;
+  updateStepIndicator(view);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateStepIndicator(view) {
+  const map = { cart:1, delivery:2, payment:3, confirm:4 };
+  const cur = map[view] || 1;
+  [1,2,3,4].forEach(n => {
+    const el = document.getElementById('step-'+n);
+    el.classList.remove('active','done');
+    if (n < cur) el.classList.add('done');
+    if (n === cur) el.classList.add('active');
+  });
+}
+
+function goToCheckout() {
+  if (getCartItems().length === 0) { showToast('Your cart is empty!'); return; }
+  renderMiniCart();
+  updateCheckoutSummary();
+  goTo('delivery');
+}
+
+// ---- MINI CART (checkout sidebar) ----
+function renderMiniCart() {
+  const items = getCartItems();
+  const html = items.map(i => `
+    <div class="mini-cart-item">
+      <div class="mini-emoji">${i.product.emoji}</div>
+      <div>
+        <div class="mini-name">${i.product.name}</div>
+        <div class="mini-qty">Qty: ${i.qty}</div>
+      </div>
+      <div class="mini-price">${fmt(i.product.price * i.qty)}</div>
+    </div>
+  `).join('');
+  document.querySelectorAll('#mini-cart-items, #mini-cart-items-2').forEach(el => el.innerHTML = html);
+}
+
+function updateCheckoutSummary() {
+  const t = calcTotals();
+  const shipStr = t.shipping === 0 ? 'Free' : fmt(t.shipping);
+
+  document.getElementById('cs-subtotal').textContent = fmt(t.subtotal);
+  document.getElementById('cs-shipping').textContent = shipStr;
+  document.getElementById('cs-total').textContent = fmt(t.total);
+
+  document.getElementById('cs2-subtotal').textContent = fmt(t.subtotal);
+  document.getElementById('cs2-shipping').textContent = shipStr;
+  document.getElementById('cs2-vat').textContent = fmt(t.vat);
+  document.getElementById('cs2-total').textContent = fmt(t.total);
+
+  document.getElementById('transfer-amount').textContent = fmt(t.total);
+  document.getElementById('paystack-amount').textContent = fmt(t.total);
+  document.getElementById('final-total-btn').textContent = fmt(t.total);
+}
+
+// Delivery option click
+document.addEventListener('change', e => {
+  if (e.target.name === 'delivery') {
+    selectedDelivery = e.target.value;
+    deliveryCost = selectedDelivery === 'express' ? 7500 : selectedDelivery === 'pickup' ? 0 : 3500;
+    document.querySelectorAll('.delivery-opt').forEach(o => {
+      o.classList.toggle('selected', o.querySelector('input').checked);
+    });
+    updateCheckoutSummary();
+    renderCart();
+  }
+  if (e.target.id === 'same-address') {
+    document.getElementById('billing-fields').style.display = e.target.checked ? 'none' : 'block';
+  }
+});
+
+// ---- FORM VALIDATION ----
+function validateDelivery() {
+  const fields = [
+    { id: 'f-fname',   eid: 'e-fname',   check: v => v.trim().length > 1 },
+    { id: 'f-lname',   eid: 'e-lname',   check: v => v.trim().length > 1 },
+    { id: 'f-email',   eid: 'e-email',   check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+    { id: 'f-phone',   eid: 'e-phone',   check: v => v.replace(/\D/g,'').length >= 10 },
+    { id: 'f-address', eid: 'e-address', check: v => v.trim().length > 5 },
+    { id: 'f-city',    eid: 'e-city',    check: v => v.trim().length > 1 },
+    { id: 'f-state',   eid: 'e-state',   check: v => v !== '' }
+  ];
+  let ok = true;
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    const err = document.getElementById(f.eid);
+    const valid = f.check(el.value);
+    el.classList.toggle('error', !valid);
+    err.classList.toggle('show', !valid);
+    if (!valid) ok = false;
+  });
+  if (ok) {
+    renderMiniCart();
+    updateCheckoutSummary();
+    goTo('payment');
+  } else {
+    showToast('Please fill in all required fields');
+  }
+}
+
+// ---- PAYMENT ----
+function switchPayTab(tab, btn) {
+  document.querySelectorAll('.pay-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+function formatCard(el) {
+  let v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1  ').trim();
+}
+function formatExpiry(el) {
+  let v = el.value.replace(/\D/g,'').substring(0,4);
+  if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+  el.value = v;
+}
+
+function placeOrder() {
+  // Simulate order placement
+  const btn = document.querySelector('#view-payment .btn-primary:last-of-type');
+  btn.textContent = 'Processing...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    const ref = generateOrderRef();
+    document.getElementById('order-ref-num').textContent = ref;
+    // Clear cart
+    localStorage.setItem('tn_cart', '[]');
+    localStorage.setItem('tn_saved', '[]');
+    savedItems = [];
+    updateCartBadge();
+    goTo('confirm');
+    btn.textContent = '🛒 Place Order';
+    btn.disabled = false;
+  }, 2200);
+}
+
+// ---- INIT ----
+renderCart();
 </script>
 </body>
 </html>
