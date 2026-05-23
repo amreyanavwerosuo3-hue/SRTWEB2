@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
+
+
+    // CHECK IF ADMIN WAS ALREADY LOGGED IN AFTER LIVE RELOAD
+    if (localStorage.getItem("currentAdminMode") === "true") {
+        adminDashboard.classList.remove("hidden-pane");
+        loginBtn.textContent = "Admin Mode";
+        loginBtn.style.backgroundColor = "#ff5500";
+        renderAdminOrders();
+    }
     // ==========================================
     // 1. ELEMENT SELECTORS
     // ==========================================
@@ -227,6 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 loginBtn.textContent = "Admin Mode";
                 loginBtn.style.backgroundColor = "#ff5500";
+
+                localStorage.setItem("currentAdminMode","true");
                 
                 adminDashboard.classList.remove("hidden-pane");
                 renderAdminOrders();
@@ -324,3 +334,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+
+if (logoutAdminBtn) {
+        logoutAdminBtn.addEventListener("click", () => {
+            localStorage.removeItem("currentAdminMode"); // Clear the live state
+            adminDashboard.classList.add("hidden-pane");
+            loginBtn.textContent = "Login / Signup";
+            loginBtn.style.backgroundColor = "";
+            loginBtn.style.color = "";
+            alert("Logged out securely from Admin Control Center.");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
